@@ -1,0 +1,142 @@
+{
+ "metadata": {
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.8.3-final"
+  },
+  "orig_nbformat": 2,
+  "kernelspec": {
+   "name": "python3",
+   "display_name": "Python 3"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2,
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": 22,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import yfinance as yf\n",
+    "import quandl\n",
+    "import nltk"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 19,
+   "metadata": {
+    "tags": []
+   },
+   "outputs": [
+    {
+     "output_type": "execute_result",
+     "data": {
+      "text/plain": "              Open    High     Low   Close    Volume  Dividends  Stock Splits\nDate                                                                         \n2020-09-08  206.50  210.03  202.20  202.66  52924300        0.0           0.0\n2020-09-09  207.60  214.84  206.70  211.29  45679000        0.0           0.0\n2020-09-10  213.40  214.74  204.11  205.37  35461500        0.0           0.0\n2020-09-11  207.20  208.63  201.24  204.03  33620100        0.0           0.0\n2020-09-14  204.24  209.20  204.03  205.41  30326800        0.0           0.0",
+      "text/html": "<div>\n<style scoped>\n    .dataframe tbody tr th:only-of-type {\n        vertical-align: middle;\n    }\n\n    .dataframe tbody tr th {\n        vertical-align: top;\n    }\n\n    .dataframe thead th {\n        text-align: right;\n    }\n</style>\n<table border=\"1\" class=\"dataframe\">\n  <thead>\n    <tr style=\"text-align: right;\">\n      <th></th>\n      <th>Open</th>\n      <th>High</th>\n      <th>Low</th>\n      <th>Close</th>\n      <th>Volume</th>\n      <th>Dividends</th>\n      <th>Stock Splits</th>\n    </tr>\n    <tr>\n      <th>Date</th>\n      <th></th>\n      <th></th>\n      <th></th>\n      <th></th>\n      <th></th>\n      <th></th>\n      <th></th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>2020-09-08</th>\n      <td>206.50</td>\n      <td>210.03</td>\n      <td>202.20</td>\n      <td>202.66</td>\n      <td>52924300</td>\n      <td>0.0</td>\n      <td>0.0</td>\n    </tr>\n    <tr>\n      <th>2020-09-09</th>\n      <td>207.60</td>\n      <td>214.84</td>\n      <td>206.70</td>\n      <td>211.29</td>\n      <td>45679000</td>\n      <td>0.0</td>\n      <td>0.0</td>\n    </tr>\n    <tr>\n      <th>2020-09-10</th>\n      <td>213.40</td>\n      <td>214.74</td>\n      <td>204.11</td>\n      <td>205.37</td>\n      <td>35461500</td>\n      <td>0.0</td>\n      <td>0.0</td>\n    </tr>\n    <tr>\n      <th>2020-09-11</th>\n      <td>207.20</td>\n      <td>208.63</td>\n      <td>201.24</td>\n      <td>204.03</td>\n      <td>33620100</td>\n      <td>0.0</td>\n      <td>0.0</td>\n    </tr>\n    <tr>\n      <th>2020-09-14</th>\n      <td>204.24</td>\n      <td>209.20</td>\n      <td>204.03</td>\n      <td>205.41</td>\n      <td>30326800</td>\n      <td>0.0</td>\n      <td>0.0</td>\n    </tr>\n  </tbody>\n</table>\n</div>"
+     },
+     "metadata": {},
+     "execution_count": 19
+    }
+   ],
+   "source": [
+    "msft = yf.Ticker(\"MSFT\")\n",
+    "hist = msft.history(period=\"max\")\n",
+    "# hist = yf.download(\"MSFT\", start='1986-03-13', end='2020-09-14')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 20,
+   "metadata": {},
+   "outputs": [
+    {
+     "output_type": "execute_result",
+     "data": {
+      "text/plain": "            Open  High   Low  Close      Volume  Dividends  Stock Splits\nDate                                                                    \n1986-03-13  0.06  0.06  0.06   0.06  1031788800        0.0           0.0\n1986-03-14  0.06  0.07  0.06   0.06   308160000        0.0           0.0\n1986-03-17  0.06  0.07  0.06   0.07   133171200        0.0           0.0\n1986-03-18  0.07  0.07  0.06   0.06    67766400        0.0           0.0\n1986-03-19  0.06  0.06  0.06   0.06    47894400        0.0           0.0",
+      "text/html": "<div>\n<style scoped>\n    .dataframe tbody tr th:only-of-type {\n        vertical-align: middle;\n    }\n\n    .dataframe tbody tr th {\n        vertical-align: top;\n    }\n\n    .dataframe thead th {\n        text-align: right;\n    }\n</style>\n<table border=\"1\" class=\"dataframe\">\n  <thead>\n    <tr style=\"text-align: right;\">\n      <th></th>\n      <th>Open</th>\n      <th>High</th>\n      <th>Low</th>\n      <th>Close</th>\n      <th>Volume</th>\n      <th>Dividends</th>\n      <th>Stock Splits</th>\n    </tr>\n    <tr>\n      <th>Date</th>\n      <th></th>\n      <th></th>\n      <th></th>\n      <th></th>\n      <th></th>\n      <th></th>\n      <th></th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>1986-03-13</th>\n      <td>0.06</td>\n      <td>0.06</td>\n      <td>0.06</td>\n      <td>0.06</td>\n      <td>1031788800</td>\n      <td>0.0</td>\n      <td>0.0</td>\n    </tr>\n    <tr>\n      <th>1986-03-14</th>\n      <td>0.06</td>\n      <td>0.07</td>\n      <td>0.06</td>\n      <td>0.06</td>\n      <td>308160000</td>\n      <td>0.0</td>\n      <td>0.0</td>\n    </tr>\n    <tr>\n      <th>1986-03-17</th>\n      <td>0.06</td>\n      <td>0.07</td>\n      <td>0.06</td>\n      <td>0.07</td>\n      <td>133171200</td>\n      <td>0.0</td>\n      <td>0.0</td>\n    </tr>\n    <tr>\n      <th>1986-03-18</th>\n      <td>0.07</td>\n      <td>0.07</td>\n      <td>0.06</td>\n      <td>0.06</td>\n      <td>67766400</td>\n      <td>0.0</td>\n      <td>0.0</td>\n    </tr>\n    <tr>\n      <th>1986-03-19</th>\n      <td>0.06</td>\n      <td>0.06</td>\n      <td>0.06</td>\n      <td>0.06</td>\n      <td>47894400</td>\n      <td>0.0</td>\n      <td>0.0</td>\n    </tr>\n  </tbody>\n</table>\n</div>"
+     },
+     "metadata": {},
+     "execution_count": 20
+    }
+   ],
+   "source": [
+    "hist.head()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "QUANDL_KEY='8ohVvwCgmzgRpFeza8FD'\n",
+    "quandl.ApiConfig.api_key = QUANDL_KEY"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 21,
+   "metadata": {},
+   "outputs": [
+    {
+     "output_type": "execute_result",
+     "data": {
+      "text/plain": "             Open   High   Low  Close     Volume  Ex-Dividend  Split Ratio  \\\nDate                                                                         \n1986-03-13  25.50  29.25  25.5  28.00  3582600.0          0.0          1.0   \n1986-03-14  28.00  29.50  28.0  29.00  1070000.0          0.0          1.0   \n1986-03-17  29.00  29.75  29.0  29.50   462400.0          0.0          1.0   \n1986-03-18  29.50  29.75  28.5  28.75   235300.0          0.0          1.0   \n1986-03-19  28.75  29.00  28.0  28.25   166300.0          0.0          1.0   \n\n            Adj. Open  Adj. High  Adj. Low  Adj. Close   Adj. Volume  \nDate                                                                  \n1986-03-13   0.058941   0.067609  0.058941    0.064720  1.031789e+09  \n1986-03-14   0.064720   0.068187  0.064720    0.067031  3.081600e+08  \n1986-03-17   0.067031   0.068765  0.067031    0.068187  1.331712e+08  \n1986-03-18   0.068187   0.068765  0.065876    0.066454  6.776640e+07  \n1986-03-19   0.066454   0.067031  0.064720    0.065298  4.789440e+07  ",
+      "text/html": "<div>\n<style scoped>\n    .dataframe tbody tr th:only-of-type {\n        vertical-align: middle;\n    }\n\n    .dataframe tbody tr th {\n        vertical-align: top;\n    }\n\n    .dataframe thead th {\n        text-align: right;\n    }\n</style>\n<table border=\"1\" class=\"dataframe\">\n  <thead>\n    <tr style=\"text-align: right;\">\n      <th></th>\n      <th>Open</th>\n      <th>High</th>\n      <th>Low</th>\n      <th>Close</th>\n      <th>Volume</th>\n      <th>Ex-Dividend</th>\n      <th>Split Ratio</th>\n      <th>Adj. Open</th>\n      <th>Adj. High</th>\n      <th>Adj. Low</th>\n      <th>Adj. Close</th>\n      <th>Adj. Volume</th>\n    </tr>\n    <tr>\n      <th>Date</th>\n      <th></th>\n      <th></th>\n      <th></th>\n      <th></th>\n      <th></th>\n      <th></th>\n      <th></th>\n      <th></th>\n      <th></th>\n      <th></th>\n      <th></th>\n      <th></th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>1986-03-13</th>\n      <td>25.50</td>\n      <td>29.25</td>\n      <td>25.5</td>\n      <td>28.00</td>\n      <td>3582600.0</td>\n      <td>0.0</td>\n      <td>1.0</td>\n      <td>0.058941</td>\n      <td>0.067609</td>\n      <td>0.058941</td>\n      <td>0.064720</td>\n      <td>1.031789e+09</td>\n    </tr>\n    <tr>\n      <th>1986-03-14</th>\n      <td>28.00</td>\n      <td>29.50</td>\n      <td>28.0</td>\n      <td>29.00</td>\n      <td>1070000.0</td>\n      <td>0.0</td>\n      <td>1.0</td>\n      <td>0.064720</td>\n      <td>0.068187</td>\n      <td>0.064720</td>\n      <td>0.067031</td>\n      <td>3.081600e+08</td>\n    </tr>\n    <tr>\n      <th>1986-03-17</th>\n      <td>29.00</td>\n      <td>29.75</td>\n      <td>29.0</td>\n      <td>29.50</td>\n      <td>462400.0</td>\n      <td>0.0</td>\n      <td>1.0</td>\n      <td>0.067031</td>\n      <td>0.068765</td>\n      <td>0.067031</td>\n      <td>0.068187</td>\n      <td>1.331712e+08</td>\n    </tr>\n    <tr>\n      <th>1986-03-18</th>\n      <td>29.50</td>\n      <td>29.75</td>\n      <td>28.5</td>\n      <td>28.75</td>\n      <td>235300.0</td>\n      <td>0.0</td>\n      <td>1.0</td>\n      <td>0.068187</td>\n      <td>0.068765</td>\n      <td>0.065876</td>\n      <td>0.066454</td>\n      <td>6.776640e+07</td>\n    </tr>\n    <tr>\n      <th>1986-03-19</th>\n      <td>28.75</td>\n      <td>29.00</td>\n      <td>28.0</td>\n      <td>28.25</td>\n      <td>166300.0</td>\n      <td>0.0</td>\n      <td>1.0</td>\n      <td>0.066454</td>\n      <td>0.067031</td>\n      <td>0.064720</td>\n      <td>0.065298</td>\n      <td>4.789440e+07</td>\n    </tr>\n  </tbody>\n</table>\n</div>"
+     },
+     "metadata": {},
+     "execution_count": 21
+    }
+   ],
+   "source": [
+    "df_quandl = quandl.get(dataset='WIKI/MSFT')\n",
+    "df_quandl.head()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "nltk.download()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from nltk.corpus import names"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "print(names.words()[:10])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ]
+}
